@@ -1,0 +1,5 @@
+
+rootProject.name="testlambda"
+
+include("app")
+include("infra")

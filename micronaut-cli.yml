@@ -1,0 +1,6 @@
+applicationType: function
+defaultPackage: com.test
+testFramework: spock
+sourceLanguage: java
+buildTool: gradle
+features: [app-name, aws-cdk, aws-lambda, aws-lambda-custom-runtime, aws-lambda-events-serde, aws-lambda-handler-function, aws-v2-sdk, graalvm, gradle, http-client, java, logback, micronaut-build, properties, reactor, reactor-http-client, readme, serialization-jackson, shade, spock, x86]

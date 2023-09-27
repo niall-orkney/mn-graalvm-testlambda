@@ -1,0 +1,60 @@
+plugins {
+    id("groovy") 
+    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("io.micronaut.application") version "4.0.3"
+}
+
+version = "0.2"
+group = "com.test"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor("io.micronaut.serde:micronaut-serde-processor")
+    implementation("com.amazonaws:aws-lambda-java-events:3.11.3")
+    implementation("io.micronaut:micronaut-http-client")
+    implementation("io.micronaut.aws:micronaut-aws-lambda-events-serde")
+    implementation("io.micronaut.aws:micronaut-aws-sdk-v2")
+    implementation("io.micronaut.aws:micronaut-function-aws")
+    implementation("io.micronaut.aws:micronaut-function-aws-custom-runtime")
+    implementation("io.micronaut.reactor:micronaut-reactor")
+    implementation("io.micronaut.reactor:micronaut-reactor-http-client")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
+    compileOnly("org.graalvm.nativeimage:svm")
+    runtimeOnly("ch.qos.logback:logback-classic")
+    testImplementation("io.micronaut:micronaut-function")
+    implementation("io.micronaut.aws:micronaut-function-client-aws")
+}
+
+
+application {
+    mainClass.set("com.test.FunctionLambdaRuntime")
+}
+java {
+    sourceCompatibility = JavaVersion.toVersion("17")
+    targetCompatibility = JavaVersion.toVersion("17")
+}
+
+micronaut {
+    runtime("lambda_provided")
+    testRuntime("spock2")
+    processing {
+        incremental(true)
+        annotations("com.test.*")
+    }
+}
+
+
+tasks.named("dockerfileNative") {
+    baseImage = "amazonlinux:2"
+    args(
+        "-XX:MaximumHeapSizePercent=80",
+        "-Dio.netty.allocator.numDirectArenas=0",
+        "-Dio.netty.noPreferDirect=true"
+    )
+}
+
+
+
